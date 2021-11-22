@@ -34,12 +34,26 @@ public class Quadrado {
             return this.bandeira;
         }
         public int bombasProximas(){         //verificar a quantidade de bombas em volta
-            int contador = 0;
+            int contador = 0;                //contador para as bombas em volta do "quadrado"
             for (Quadrado q : this.quadradosProximos) {
                 if(q.bomba){
                     contador++;
                 }
             }
             return contador;
+        }
+        public int ativar(){        //após clicar, verificar se tem bomba ou não
+            this.ativado = true;
+            if (this.bomba) {
+                return -1;     //-1 pois numero negativo não conta no contador 
+            } else {
+                return bombasProximas();
+            }
+        }
+        public void reiniciar (){   //reiniciar o campominado
+            this.bomba = false;
+            this.revelado = false;
+            this.bandeira = false;
+            this.ativado = false;
         }
 } 
