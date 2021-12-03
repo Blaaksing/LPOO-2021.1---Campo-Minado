@@ -118,6 +118,6 @@ public class Quadrado {
         return "+" + this.numMinasNosVizinhos();
     }
 
-    
+  
 }
 
