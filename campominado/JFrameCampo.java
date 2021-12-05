@@ -1,7 +1,6 @@
 
 package campominado;
 
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,7 +35,7 @@ public class JFrameCampo extends JFrame {
         panel.setLayout(null);
         this.add(panel);
         quadrado = new JButtonQuadrado[Tamanho.linhas][Tamanho.colunas];
-        
+
         for (int i = 0; i < Tamanho.linhas; i++) {
             for (int j = 0; j < Tamanho.colunas; j++) {
                 quadrado[i][j] = new JButtonQuadrado(this.c, this);
@@ -65,14 +64,16 @@ public class JFrameCampo extends JFrame {
         this.resetBut.setSize(Tamanho.espaco+40, Tamanho.espaco);
         this.resetBut.setLocation((Tamanho.espaco * Tamanho.colunas) / 2 - Tamanho.espaco / 2 - 20, Tamanho.margemSuperior - Tamanho.espaco);
         this.panel.add(this.resetBut);
-        
+
 
         this.facilBut = new JButton("F");
         this.facilBut.addActionListener((java.awt.event.ActionEvent evt) -> {
             Tamanho.colunas = 6;
             Tamanho.linhas = 6;
             Tamanho.minas = 6;
+            JButtonQuadrado.contMarc=0;
             this.hardReset();
+            
         });
         this.facilBut.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
         this.facilBut.setLocation(0, 0);
@@ -83,6 +84,7 @@ public class JFrameCampo extends JFrame {
             Tamanho.colunas = 10;
             Tamanho.linhas = 10;
             Tamanho.minas = 15;
+            JButtonQuadrado.contMarc=0;
             this.hardReset();
         });
         this.medBut.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
@@ -94,6 +96,7 @@ public class JFrameCampo extends JFrame {
             Tamanho.colunas = 16;
             Tamanho.linhas = 14;
             Tamanho.minas = 40;
+            JButtonQuadrado.contMarc=0;
             this.hardReset();
 
         });
@@ -105,17 +108,18 @@ public class JFrameCampo extends JFrame {
         this.custBut.addActionListener((java.awt.event.ActionEvent evt) -> {            
             int l = Integer.parseInt(JOptionPane.showInputDialog("Quantas linhas? "));
             Tamanho.linhas = l;
-            
+              
             int c = Integer.parseInt(JOptionPane.showInputDialog("Quantas colunas? "));
             Tamanho.colunas = c;
-            
+
             int m = Integer.parseInt(JOptionPane.showInputDialog("Quantas minas? "));
             Tamanho.minas = m;
-            
+
+            JButtonQuadrado.contMarc=0;
             this.hardReset();
-            
+
             // ideia de exceção: if(l>=15 || c>30)
-        
+
         });
         this.custBut.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
         this.custBut.setLocation((Tamanho.espaco * Tamanho.colunas) / 4 * 3, 0);
