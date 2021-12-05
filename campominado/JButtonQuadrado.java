@@ -1,4 +1,3 @@
-
 package campominado;
 
 import java.awt.Image;
@@ -11,7 +10,8 @@ import javax.swing.SwingUtilities;
 import celula.Quadrado;
 
 public final class JButtonQuadrado extends JButton{
-
+	
+	static int contMarc;
     int linha;
     int coluna;
     AreaDoCampo area;
@@ -57,7 +57,7 @@ public final class JButtonQuadrado extends JButton{
     }
 
     public void clicar() {
-        
+
         System.out.println("linha: " + linha + " coluna: " + coluna);
 
                                                                     //Retorna numVizinhosMinados se quadrado NAO POSSUI MINA
@@ -91,16 +91,20 @@ public final class JButtonQuadrado extends JButton{
                 img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
                 this.setIcon(new ImageIcon(img));
             } catch (Exception ex) {
+            	contMarc = contMarc + 1;
                 this.setText("M");
-                System.out.println("ERRO!");
+                System.out.println(JButtonQuadrado.contMarc);
             }
         } else {
+        	contMarc = contMarc - 1;
             this.setIcon(null);
             this.setText("");
         }
+        if (contMarc > Tamanho.minas) {
+        	System.out.println("Excesso de minas");
+        }
     }
-    
- 
+
 
     public void setPos(int linhas, int colunas) {
         this.linha = linhas;
