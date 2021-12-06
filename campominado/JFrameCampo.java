@@ -1,10 +1,10 @@
-
 package campominado;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import exceptions.*;
 
 public class JFrameCampo extends JFrame {
 
@@ -54,7 +54,7 @@ public class JFrameCampo extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
 
-        //adicionar os botÃµes das dificuldades e para reiniciar o jogo
+        //adicionar os botões das dificuldades e para reiniciar o jogo
 
         this.resetBut = new JButton("Reiniciar");
         this.resetBut.addActionListener((java.awt.event.ActionEvent evt) -> {
@@ -66,12 +66,12 @@ public class JFrameCampo extends JFrame {
         this.panel.add(this.resetBut);
 
 
-        this.facilBut = new JButton("F");
+        this.facilBut = new JButton("F");												// Campo no modo fácil
         this.facilBut.addActionListener((java.awt.event.ActionEvent evt) -> {
-            Tamanho.colunas = 6;
-            Tamanho.linhas = 6;
+            Tamanho.colunas = 5;
+            Tamanho.linhas = 5;
             Tamanho.minas = 6;
-            JButtonQuadrado.contMarc=0;
+            JButtonQuadrado.contMarc = 0;
             this.hardReset();
             
         });
@@ -79,24 +79,24 @@ public class JFrameCampo extends JFrame {
         this.facilBut.setLocation(0, 0);
         this.panel.add(this.facilBut);
 
-        this.medBut = new JButton("M");
+        this.medBut = new JButton("M");													// Campo no modo médio
         this.medBut.addActionListener((java.awt.event.ActionEvent evt) -> {
-            Tamanho.colunas = 10;
+            Tamanho.colunas = 8;
             Tamanho.linhas = 10;
-            Tamanho.minas = 15;
-            JButtonQuadrado.contMarc=0;
+            Tamanho.minas = 20;
+            JButtonQuadrado.contMarc = 0;
             this.hardReset();
         });
         this.medBut.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
         this.medBut.setLocation((Tamanho.espaco * Tamanho.colunas) / 4, 0);
         this.panel.add(this.medBut);
 
-        this.difBut = new JButton("D");
+        this.difBut = new JButton("D");													// Campo no modo difícil
         this.difBut.addActionListener((java.awt.event.ActionEvent evt) -> {
-            Tamanho.colunas = 16;
-            Tamanho.linhas = 14;
-            Tamanho.minas = 40;
-            JButtonQuadrado.contMarc=0;
+            Tamanho.colunas = 14;
+            Tamanho.linhas = 12;
+            Tamanho.minas = 44;
+            JButtonQuadrado.contMarc = 0;
             this.hardReset();
 
         });
@@ -105,21 +105,34 @@ public class JFrameCampo extends JFrame {
         this.panel.add(this.difBut);
 
         this.custBut = new JButton("C");
-        this.custBut.addActionListener((java.awt.event.ActionEvent evt) -> {            
-            int l = Integer.parseInt(JOptionPane.showInputDialog("Quantas linhas? "));
+        this.custBut.addActionListener((java.awt.event.ActionEvent evt) -> {            				//	Iniciar o campo customizado
+            int l = Integer.parseInt(JOptionPane.showInputDialog("Quantas linhas? \n Máximo: 14"));
             Tamanho.linhas = l;
               
-            int c = Integer.parseInt(JOptionPane.showInputDialog("Quantas colunas? "));
+            int c = Integer.parseInt(JOptionPane.showInputDialog("Quantas colunas? \n Máximo: 30"));
             Tamanho.colunas = c;
 
-            int m = Integer.parseInt(JOptionPane.showInputDialog("Quantas minas? "));
+            int m = Integer.parseInt(JOptionPane.showInputDialog("Quantas minas? \n Máximo: "+((m=l*c)-1)));
             Tamanho.minas = m;
 
+            if (Tamanho.linhas > 14 || Tamanho.colunas > 30 || Tamanho.minas > (m-1)) {
+                try {
+                	
+                	throw new LimiteLinhaColunaMinasExcedido(Tamanho.linhas, Tamanho.colunas, Tamanho.minas); //Exceção para caso, no tabuleiro customizado, o tamanho, a coluna e as minas ultrapassem o limite permitido
+                	}
+                	catch(ArrayIndexOutOfBoundsException | LimiteLinhaColunaMinasExcedido e) {
+                		System.err.println("ALGUM PARÂMETRO FOI PASSADO DE MANEIRA ERRÔNEA. \n TENTE NOVAMENTE!");
+                	}
+                	catch(Exception e) {
+                		System.err.println("Houve um erro");
+                		
+                	}
+                }
+            
+            
             JButtonQuadrado.contMarc=0;
             this.hardReset();
-
-            // ideia de exceÃ§Ã£o: if(l>=15 || c>30)
-
+            
         });
         this.custBut.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
         this.custBut.setLocation((Tamanho.espaco * Tamanho.colunas) / 4 * 3, 0);

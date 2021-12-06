@@ -5,9 +5,10 @@ import java.awt.event.MouseEvent;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import celula.Quadrado;
+import exceptions.*;
 
 public final class JButtonQuadrado extends JButton{
 	
@@ -28,7 +29,7 @@ public final class JButtonQuadrado extends JButton{
             botaoPressionado(false);
         });
 
-        this.addMouseListener(new java.awt.event.MouseAdapter() { //comunicaÃ§Ã£o com usuÃ¡rio
+        this.addMouseListener(new java.awt.event.MouseAdapter() { //comunicação com usuário
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     botaoPressionado(true);
@@ -43,6 +44,7 @@ public final class JButtonQuadrado extends JButton{
         this.setText(text);
         this.setEnabled(true);
         this.setIcon(null);
+        JButtonQuadrado.contMarc=0;
     }
 
     private void botaoPressionado(boolean mouseBotaoDireito) {
@@ -85,7 +87,7 @@ public final class JButtonQuadrado extends JButton{
             return;
         }
         boolean estaMarcado = this.espacoLogica.marcar();
-        if (this.espacoLogica.getBandeira()) { //adicionar a animaÃ§Ã£o da bandeira com a imagem
+        if (this.espacoLogica.getBandeira()) { //adicionar a animação da bandeira com a imagem posteriormente
             try {
                 Image img = ImageIO.read(getClass().getResource(""));
                 img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
@@ -100,8 +102,20 @@ public final class JButtonQuadrado extends JButton{
             this.setIcon(null);
             this.setText("");
         }
-        if (contMarc > Tamanho.minas) {
-        	System.out.println("Excesso de minas");
+        if (contMarc > Tamanho.minas) {		// Se o contador de marcação for maior que a quantidade de minas
+        	try {
+        		contMarc = contMarc * 1;
+        		this.setIcon(null);
+        		this.setText("");
+        		
+        		throw new LimiteBandeirasExcedido(JButtonQuadrado.contMarc);				// Exceção lançada para alertar sobre o limite de bandeiras
+        	}
+        	catch (ArrayIndexOutOfBoundsException | LimiteBandeirasExcedido e) {
+        		JOptionPane.showMessageDialog(null,"O numero de bandeiras marcadas excede o número de bombas!");
+        		System.err.println("O numero de bandeiras marcadas excede o número de bombas!");
+        	} catch (Exception e) {
+        		System.err.println("Houve um erro");
+			}
         }
     }
 
