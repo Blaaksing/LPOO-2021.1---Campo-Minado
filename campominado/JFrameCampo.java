@@ -56,9 +56,9 @@ public class JFrameCampo extends JFrame {
         this.setSize(Tamanho.colunas * Tamanho.espaco+15, Tamanho.linhas * Tamanho.espaco + Tamanho.margemSuperior + Tamanho.hBarra +17);
         this.setResizable(true);
         this.setVisible(true);
-        this.setTitle("Tempo: "+Temporizador.seconds+" Marcações: "+JButtonQuadrado.contMarc+"/"+Tamanho.minas+"Bombas"); // Tentativa de fazer um título para o game, exibindo as informações do temporizador ao vivo e o numero de marcações, porém sem sucesso (ainda)
+        this.setTitle("Tempo: "+Temporizador.seconds+" MarcaÃ§Ãµes: "+JButtonQuadrado.contMarc+"/"+Tamanho.minas+"Bombas"); // Tentativa de fazer um tÃ­tulo para o game, exibindo as informaÃ§Ãµes do temporizador ao vivo e o numero de marcaÃ§Ãµes, porÃ©m sem sucesso (ainda)
 
-      /*  PROTOTIPO MUITO INICIAL DE MÉTODO PARA ARMAZENAR OS RECORDES
+      /*  PROTOTIPO MUITO INICIAL DE MÃ‰TODO PARA ARMAZENAR OS RECORDES
        
         this.recordeBut = new JButton("Recordes");
        
@@ -79,13 +79,13 @@ public class JFrameCampo extends JFrame {
         this.panel.add(this.resetBut);
 
 
-        this.facilBut = new JButton("F");												// Campo no modo fácil
+        this.facilBut = new JButton("F");												// Campo no modo fÃ¡cil
         this.facilBut.addActionListener((java.awt.event.ActionEvent evt) -> {
             Tamanho.colunas = 5;
             Tamanho.linhas = 5;
             Tamanho.minas = 6;
             JButtonQuadrado.contMarc = 0;
-        //    Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda não consegui implementar um meio dele iniciar a contagem.
+        //    Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda nÃ£o consegui implementar um meio dele iniciar a contagem.
             this.hardReset();
         });
         this.facilBut.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
@@ -93,13 +93,13 @@ public class JFrameCampo extends JFrame {
         this.panel.add(this.facilBut);
 
         
-        this.medBut = new JButton("M");													// Campo no modo médio
+        this.medBut = new JButton("M");													// Campo no modo mÃ©dio
         this.medBut.addActionListener((java.awt.event.ActionEvent evt) -> {
             Tamanho.colunas = 8;
             Tamanho.linhas = 10;
             Tamanho.minas = 20;
             JButtonQuadrado.contMarc = 0;
-         //   Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda não consegui implementar um meio dele iniciar a contagem.
+         //   Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda nÃ£o consegui implementar um meio dele iniciar a contagem.
             this.hardReset();
         });
         this.medBut.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
@@ -107,13 +107,13 @@ public class JFrameCampo extends JFrame {
         this.panel.add(this.medBut);
 
 
-        this.difBut = new JButton("D");													// Campo no modo difícil
+        this.difBut = new JButton("D");													// Campo no modo difÃ­cil
         this.difBut.addActionListener((java.awt.event.ActionEvent evt) -> {
             Tamanho.colunas = 14;
             Tamanho.linhas = 12;
             Tamanho.minas = 44;
             JButtonQuadrado.contMarc = 0;
-         //   Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda não consegui implementar um meio dele iniciar a contagem.
+         //   Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda nÃ£o consegui implementar um meio dele iniciar a contagem.
             this.hardReset();
         });
         this.difBut.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
@@ -123,22 +123,23 @@ public class JFrameCampo extends JFrame {
         
         this.custBut = new JButton("C");
         this.custBut.addActionListener((java.awt.event.ActionEvent evt) -> {            				//	Iniciar o campo customizado
-            int l = Integer.parseInt(JOptionPane.showInputDialog("Quantas linhas? \n Máximo: 14"));
+            int l = Integer.parseInt(JOptionPane.showInputDialog("Quantas linhas? \n MÃ¡ximo: 14"));
             Tamanho.linhas = l;
               
-            int c = Integer.parseInt(JOptionPane.showInputDialog("Quantas colunas? \n Máximo: 30"));
+            int c = Integer.parseInt(JOptionPane.showInputDialog("Quantas colunas? \n MÃ¡ximo: 30"));
             Tamanho.colunas = c;
 
-            int m = Integer.parseInt(JOptionPane.showInputDialog("Quantas minas? \n Máximo: "+((m=l*c)-1)));
+            int m = Integer.parseInt(JOptionPane.showInputDialog("Quantas minas? \n MÃ¡ximo: "+(m=(l*c)-1)));
             Tamanho.minas = m;
 
-            if (Tamanho.linhas > 14 || Tamanho.colunas > 30 || Tamanho.minas > (m-1)) {
+            if (Tamanho.linhas > 14 || Tamanho.colunas > 30 || Tamanho.minas > (m=(l*c)-1)) {
                 try {
                 	
-                	throw new LimiteLinhaColunaMinasExcedido(Tamanho.linhas, Tamanho.colunas, Tamanho.minas); //Exceção para caso, no tabuleiro customizado, o tamanho, a coluna ou as minas ultrapassem o limite permitido
+                	throw new LimiteLinhaColunaMinasExcedido(Tamanho.linhas, Tamanho.colunas, Tamanho.minas); //ExceÃ§Ã£o para caso, no tabuleiro customizado, o tamanho, a coluna ou as minas ultrapassem o limite permitido
                 	}
                 	catch(ArrayIndexOutOfBoundsException | LimiteLinhaColunaMinasExcedido e) {
-                		System.err.println("ALGUM PARÂMETRO FOI PASSADO DE MANEIRA ERRÔNEA. \n TENTE NOVAMENTE!");
+                		JOptionPane.showMessageDialog(null,"Algum parÃ¢metro foi passado de maneira equivocada.\n Feche o jogo e tente novamente");
+                		System.err.println("ALGUM PARÃ‚METRO FOI PASSADO DE MANEIRA ERRÃ”NEA. \n TENTE NOVAMENTE!");
                 	}
                 	catch(Exception e) {
                 		System.err.println("Houve um erro");
@@ -148,7 +149,7 @@ public class JFrameCampo extends JFrame {
             
             
             JButtonQuadrado.contMarc=0;
-          //  Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda não consegui implementar um meio dele iniciar a contagem.
+          //  Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda nÃ£o consegui implementar um meio dele iniciar a contagem.
             this.hardReset();
             
         });
@@ -190,12 +191,12 @@ public class JFrameCampo extends JFrame {
         System.out.println("Verificando se Ganhou ou Perdeu");
         if (this.c.vitoria()) {
             this.desativaBotoes();
-            JOptionPane.showMessageDialog(null,"VOCÊ VENCEU!! :D");
+            JOptionPane.showMessageDialog(null,"VOCÃŠ VENCEU!! :D");
         }
 
         if (this.c.derrota()) {
         	this.desativaBotoes();
-        	JOptionPane.showMessageDialog(null,"Você perdeu!! :(");
+        	JOptionPane.showMessageDialog(null,"VocÃª perdeu!! :(");
         }
     }
 
