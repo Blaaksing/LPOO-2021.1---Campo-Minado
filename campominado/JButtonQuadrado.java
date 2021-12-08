@@ -9,8 +9,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import celula.Quadrado;
 import exceptions.*;
+//import recordes.*; // talvez, poderá ser necessária a criação de um pacote para os recordes (????????)
 
-public final class JButtonQuadrado extends JButton{
+public class JButtonQuadrado extends JButton{
 	
 	static int contMarc;
     int linha;
@@ -26,7 +27,7 @@ public final class JButtonQuadrado extends JButton{
         this.setText(text);
         this.area = a;
         this.addActionListener((java.awt.event.ActionEvent evt) -> {
-            botaoPressionado(false);
+        botaoPressionado(false);
         });
 
         this.addMouseListener(new java.awt.event.MouseAdapter() { //comunicação com usuário
@@ -44,7 +45,9 @@ public final class JButtonQuadrado extends JButton{
         this.setText(text);
         this.setEnabled(true);
         this.setIcon(null);
+      //  Temporizador.run(999);	 //Tentativa de fazer a contagem resetar... mas também sem sucesso
         JButtonQuadrado.contMarc=0;
+     	
     }
 
     private void botaoPressionado(boolean mouseBotaoDireito) {
@@ -61,14 +64,12 @@ public final class JButtonQuadrado extends JButton{
     public void clicar() {
 
         System.out.println("linha: " + linha + " coluna: " + coluna);
-
                                                                     //Retorna numVizinhosMinados se quadrado NAO POSSUI MINA
         int numVizinhosMinados = espacoLogica.clicar();
-
         if (this.espacoLogica.getBomba()) {
             this.campoGrafico.revelarMinas();
         }
-
+        
         if (numVizinhosMinados == 0) {
             for (Quadrado vizinho : espacoLogica.getVizinhos()) {
                 if (!vizinho.getAtivado()) {
@@ -79,9 +80,8 @@ public final class JButtonQuadrado extends JButton{
         }
         this.text = Integer.toString(numVizinhosMinados);
         this.revela(this.text);
-
     }
-
+    
     public void marcar() {
         if (this.espacoLogica.getAtivado()) {
             return;
@@ -119,7 +119,6 @@ public final class JButtonQuadrado extends JButton{
         }
     }
 
-
     public void setPos(int linhas, int colunas) {
         this.linha = linhas;
         this.coluna = colunas;
@@ -140,7 +139,6 @@ public final class JButtonQuadrado extends JButton{
         } else {
             this.setText(cod);
         }
-
         this.setEnabled(false);
     }
 
