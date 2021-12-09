@@ -6,8 +6,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import exceptions.*;
 
+
 public class JFrameCampo extends JFrame {
 
+   
     JPanel panel;
     JButtonQuadrado[][] quadrado;
     AreaDoCampo c;
@@ -28,10 +30,12 @@ public class JFrameCampo extends JFrame {
         this.dispose();
         
     }
-    
+     
     
     private void confIniciais() {
-    	
+        
+        
+        //fim do temporizador
         this.c = new AreaDoCampo();
         c.adicionarMinas();
         this.panel = new JPanel();
@@ -39,6 +43,7 @@ public class JFrameCampo extends JFrame {
         this.add(panel);
         quadrado = new JButtonQuadrado[Tamanho.linhas][Tamanho.colunas];
 
+        
         for (int i = 0; i < Tamanho.linhas; i++) {
             for (int j = 0; j < Tamanho.colunas; j++) {
                 quadrado[i][j] = new JButtonQuadrado(this.c, this);
@@ -56,7 +61,7 @@ public class JFrameCampo extends JFrame {
         this.setSize(Tamanho.colunas * Tamanho.espaco+15, Tamanho.linhas * Tamanho.espaco + Tamanho.margemSuperior + Tamanho.hBarra +17);
         this.setResizable(true);
         this.setVisible(true);
-        this.setTitle("Tempo: "+Temporizador.seconds+" Marcações: "+JButtonQuadrado.contMarc+"/"+Tamanho.minas+"Bombas"); // Tentativa de fazer um título para o game, exibindo as informações do temporizador ao vivo e o numero de marcações, porém sem sucesso (ainda)
+        
 
       /*  PROTOTIPO MUITO INICIAL DE MÉTODO PARA ARMAZENAR OS RECORDES
        
@@ -71,7 +76,8 @@ public class JFrameCampo extends JFrame {
         
         this.resetBut = new JButton("Reiniciar");
         this.resetBut.addActionListener((java.awt.event.ActionEvent evt) -> {
-
+            
+            hardReset();
             this.reiniciar();
         });
         this.resetBut.setSize(Tamanho.espaco+40, Tamanho.espaco);
@@ -138,8 +144,12 @@ public class JFrameCampo extends JFrame {
                 	throw new LimiteLinhaColunaMinasExcedido(Tamanho.linhas, Tamanho.colunas, Tamanho.minas); //Exceção para caso, no tabuleiro customizado, o tamanho, a coluna ou as minas ultrapassem o limite permitido
                 	}
                 	catch(ArrayIndexOutOfBoundsException | LimiteLinhaColunaMinasExcedido e) {
-                		JOptionPane.showMessageDialog(null,"Algum parâmetro foi passado de maneira equivocada.\n Feche o jogo e tente novamente");
-                		System.err.println("ALGUM PARÂMETRO FOI PASSADO DE MANEIRA ERRÔNEA. \n TENTE NOVAMENTE!");
+                		JOptionPane.showMessageDialog(null,"Algum parâmetro foi passado de maneira equivocada.\nTente novamente");
+                		System.err.println("ALGUM PARÂMETRO FOI PASSADO DE MANEIRA ERRÔNEA. \nTENTE NOVAMENTE!");
+                        //voltar para o modo fácil (padrão)
+                        Tamanho.linhas = 5;
+                        Tamanho.colunas = 5;
+                        Tamanho.minas = 5;
                 	}
                 	catch(Exception e) {
                 		System.err.println("Houve um erro");
@@ -149,7 +159,7 @@ public class JFrameCampo extends JFrame {
             
             
             JButtonQuadrado.contMarc=0;
-          //  Temporizador.seconds = 0;					// O temporizador reinicia para o zero, mas ainda não consegui implementar um meio dele iniciar a contagem.
+         
             this.hardReset();
             
         });
@@ -184,7 +194,6 @@ public class JFrameCampo extends JFrame {
                 quadrado[i][j].setEnabled(false);
             }
         } 
-        Temporizador.stop();
     }
 
     public void checkEstado() {
@@ -192,12 +201,15 @@ public class JFrameCampo extends JFrame {
         if (this.c.vitoria()) {
             this.desativaBotoes();
             JOptionPane.showMessageDialog(null,"VOCÊ VENCEU!! :D");
+            hardReset();
         }
 
         if (this.c.derrota()) {
         	this.desativaBotoes();
         	JOptionPane.showMessageDialog(null,"Você perdeu!! :(");
+            hardReset();
+
         }
     }
-
+   
 }
