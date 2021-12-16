@@ -18,6 +18,15 @@ public class JFrameCampo extends JFrame implements Interface{
     JButton difBut;
     JButton custBut;
     JButton rankingBut;
+    JButton cmm;
+    private static int campomaluco=0;
+
+    public static int getCampomaluco() {
+        return campomaluco;
+    }
+    public void setCampomaluco(int campomaluco) {
+        JFrameCampo.campomaluco = campomaluco;
+    }
 
     public JFrameCampo(){
     	System.out.println();
@@ -31,12 +40,11 @@ public class JFrameCampo extends JFrame implements Interface{
         this.dispose();
         
     }
-     
     
     public void confIniciais(){
         campominado.Temporizador.timer.start();
         Temporizador reset = new Temporizador();
-        
+    
         //fim do temporizador
         this.c = new AreaDoCampo();
         c.adicionarMinas();
@@ -76,7 +84,23 @@ public class JFrameCampo extends JFrame implements Interface{
         this.rankingBut.setLocation((Tamanho.espaco * Tamanho.colunas) / 2 - Tamanho.espaco / 2 - 20, (Tamanho.espaco * Tamanho.linhas)+105);
         this.panel.add(this.rankingBut);
         //
-        
+        //campo minado maluco
+        this.cmm = new JButton("CMM");													
+        this.cmm.addActionListener((java.awt.event.ActionEvent evt) -> {
+            
+            if (getCampomaluco()==0) {
+                setCampomaluco(1);
+            } else {
+                setCampomaluco(0);
+            }
+            
+            
+        });
+        this.cmm.setSize((Tamanho.espaco * Tamanho.colunas) / 4, Tamanho.espaco);
+        this.cmm.setLocation(180 , 50);
+        this.panel.add(this.cmm);
+
+        //cmm.setIcon(new ImageIcon(getClass().getResource("creeper.png")));
         this.resetBut = new JButton("");
         this.resetBut.addActionListener((java.awt.event.ActionEvent evt) -> {
             
@@ -175,7 +199,6 @@ public class JFrameCampo extends JFrame implements Interface{
         this.panel.add(this.custBut);
         custBut.setIcon(new ImageIcon(getClass().getResource("enderman.png")));
 
-        
         
 
     }

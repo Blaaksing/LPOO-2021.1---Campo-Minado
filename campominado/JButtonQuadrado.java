@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 import celula.Quadrado;
 import exceptions.*;
 
+
 public class JButtonQuadrado extends JButton implements Interface{
 	
 	static int contMarc;
@@ -19,8 +20,9 @@ public class JButtonQuadrado extends JButton implements Interface{
     JFrameCampo campoGrafico;
     String text;
     private int numVizinhosMinados;
+    
 
-    public JButtonQuadrado(AreaDoCampo a, JFrameCampo cg) {
+    public JButtonQuadrado(AreaDoCampo a, JFrameCampo cg){
         this.campoGrafico = cg;
         this.text = "";
         this.setText(text);
@@ -46,9 +48,8 @@ public class JButtonQuadrado extends JButton implements Interface{
         this.setIcon(null);
       
         JButtonQuadrado.contMarc=0;
-     	
-    }
 
+    }
     private void botaoPressionado(boolean mouseBotaoDireito) {
         if (!mouseBotaoDireito) { //botao esquerdo
             if (!this.espacoLogica.getBandeira()) {
@@ -79,7 +80,17 @@ public class JButtonQuadrado extends JButton implements Interface{
         this.text = Integer.toString(numVizinhosMinados);
         this.revela(this.text);
     }
+    /*public void hardReset() {
+
+        CampoMinadoMain.hardReset();
+        this.dispose();
+        
+    }
     
+
+    private void dispose() {
+    }*/
+
     public void marcar() {
         if (this.espacoLogica.getAtivado()) {
             return;
@@ -95,6 +106,16 @@ public class JButtonQuadrado extends JButton implements Interface{
                 this.setText("M");
                 System.out.println(JButtonQuadrado.contMarc);
             }
+            int teste = JFrameCampo.getCampomaluco();
+        
+            if (teste == 1) {
+                
+                reiniciar();
+                //hardReset();
+            } else{
+                System.out.println("PEGOU????? ");
+            }
+            System.out.println("BORA VER: "+JFrameCampo.getCampomaluco());
         } else {
         	contMarc = contMarc - 1;
             try {
