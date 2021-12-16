@@ -5,13 +5,11 @@ import java.awt.event.MouseEvent;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import celula.Quadrado;
 import exceptions.*;
-//import recordes.*; // talvez, poderá ser necessária a criação de um pacote para os recordes (????????)
 
-public class JButtonQuadrado extends JButton{
+public class JButtonQuadrado extends JButton implements Interface{
 	
 	static int contMarc;
     int linha;
@@ -20,6 +18,7 @@ public class JButtonQuadrado extends JButton{
     Quadrado espacoLogica;
     JFrameCampo campoGrafico;
     String text;
+    private int numVizinhosMinados;
 
     public JButtonQuadrado(AreaDoCampo a, JFrameCampo cg) {
         this.campoGrafico = cg;
@@ -30,7 +29,7 @@ public class JButtonQuadrado extends JButton{
         botaoPressionado(false);
         });
 
-        this.addMouseListener(new java.awt.event.MouseAdapter() { //comunicação com usuário
+        this.addMouseListener(new java.awt.event.MouseAdapter() { //comunicaï¿½ï¿½o com o usuï¿½rio
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     botaoPressionado(true);
@@ -45,7 +44,7 @@ public class JButtonQuadrado extends JButton{
         this.setText(text);
         this.setEnabled(true);
         this.setIcon(null);
-      //  Temporizador.run(999);	 //Tentativa de fazer a contagem resetar... mas também sem sucesso
+      
         JButtonQuadrado.contMarc=0;
      	
     }
@@ -60,12 +59,11 @@ public class JButtonQuadrado extends JButton{
         }
         this.campoGrafico.checkEstado();
     }
-
+    
     public void clicar() {
 
-        System.out.println("linha: " + linha + " coluna: " + coluna);
                                                                     //Retorna numVizinhosMinados se quadrado NAO POSSUI MINA
-        int numVizinhosMinados = espacoLogica.clicar();
+        numVizinhosMinados = espacoLogica.clicar();
         if (this.espacoLogica.getBomba()) {
             this.campoGrafico.revelarMinas();
         }
@@ -86,10 +84,10 @@ public class JButtonQuadrado extends JButton{
         if (this.espacoLogica.getAtivado()) {
             return;
         }
-        boolean estaMarcado = this.espacoLogica.marcar();
-        if (this.espacoLogica.getBandeira()) { //adicionar a animação da bandeira com a imagem posteriormente
+        this.espacoLogica.marcar();
+        if (this.espacoLogica.getBandeira()) { //adicionar a animacao da bandeira com a imagem posteriormente
             try {
-                Image img = ImageIO.read(getClass().getResource(""));
+                Image img = ImageIO.read(getClass().getResource("Bandeira.png"));
                 img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
                 this.setIcon(new ImageIcon(img));
             } catch (Exception ex) {
@@ -99,20 +97,24 @@ public class JButtonQuadrado extends JButton{
             }
         } else {
         	contMarc = contMarc - 1;
-            this.setIcon(null);
+            try {
+                Image img = ImageIO.read(getClass().getResource("terra.jpg"));
+                img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                this.setIcon(new ImageIcon(img));
+            } catch (Exception ex) {
+                this.setText(" ");
+                System.out.println(JButtonQuadrado.contMarc);
+            }
             this.setText("");
         }
-        if (contMarc > Tamanho.minas) {		// Se o contador de marcação for maior que a quantidade de minas
+        if (contMarc > Tamanho.minas) {		// Se o contador de marcacao for maior que a quantidade de minas
         	try {
         		contMarc = contMarc * 1;
-        		this.setIcon(null);
-        		this.setText("");
         		
-        		throw new LimiteBandeirasExcedido(JButtonQuadrado.contMarc);				// Exceção lançada para alertar sobre o limite de bandeiras
+        		throw new LimiteBandeirasExcedido(JButtonQuadrado.contMarc);				// Excecao lancada para alertar sobre o limite de bandeiras
         	}
         	catch (ArrayIndexOutOfBoundsException | LimiteBandeirasExcedido e) {
-        		JOptionPane.showMessageDialog(null,"O numero de bandeiras marcadas excede o número de bombas!");
-        		System.err.println("O numero de bandeiras marcadas excede o número de bombas!");
+        		//JOptionPane.showMessageDialog(null,"O numero de bandeiras marcadas excede o numero de bombas!");
         	} catch (Exception e) {
         		System.err.println("Houve um erro");
 			}
@@ -123,13 +125,21 @@ public class JButtonQuadrado extends JButton{
         this.linha = linhas;
         this.coluna = colunas;
         this.espacoLogica = area.getQuadrado(linhas, colunas);
+        try {
+            Image img = ImageIO.read(getClass().getResource("terra.jpg"));
+            img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+            this.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            this.setText(" ");
+            System.out.println(JButtonQuadrado.contMarc);
+        }
     }
 
     public void revela(String cod) {
 
         if (cod.equals("-1")) {  //adicionar a imagem da mina no local que ela aparecer
             try {
-                Image img = ImageIO.read(getClass().getResource(""));
+                Image img = ImageIO.read(getClass().getResource("bomba.png"));
                 img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
                 this.setIcon(new ImageIcon(img));
             } catch (Exception ex) {
@@ -137,9 +147,113 @@ public class JButtonQuadrado extends JButton{
                 System.out.println("ERRO!");
             }
         } else {
-            this.setText(cod);
+            if (numVizinhosMinados == 0) {
+                try {
+                    Image img = ImageIO.read(getClass().getResource("pedra.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+            }else if (numVizinhosMinados == 1){
+                try {
+                    Image img = ImageIO.read(getClass().getResource("carvao.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+            } else if (numVizinhosMinados == 2){
+                try {
+                    Image img = ImageIO.read(getClass().getResource("ferro.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+
+            } else if (numVizinhosMinados == 3){
+                try {
+                    Image img = ImageIO.read(getClass().getResource("ouro.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+            } else if (numVizinhosMinados == 4){
+                try {
+                    Image img = ImageIO.read(getClass().getResource("diamante.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+            } else if (numVizinhosMinados == 5){
+                try {
+                    Image img = ImageIO.read(getClass().getResource("esmeralda.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+            } else if (numVizinhosMinados == 6){
+                try {
+                    Image img = ImageIO.read(getClass().getResource("lapislazuli.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+            } else if (numVizinhosMinados == 7){
+                try {
+                    Image img = ImageIO.read(getClass().getResource("redstone.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+            } else if (numVizinhosMinados == 8){
+                try {
+                    Image img = ImageIO.read(getClass().getResource("ametista.png"));
+                    img = img.getScaledInstance(Tamanho.espaco, Tamanho.espaco, java.awt.Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } catch (Exception ex) {
+                    this.setText(" ");
+                    System.out.println(JButtonQuadrado.contMarc);
+                }
+            } else {
+                this.setText(cod);
+                this.setIcon(null);
+            }
+            
         }
-        this.setEnabled(false);
+        //this.setEnabled(false);
     }
+
+	@Override
+	public void confIniciais() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void revelarMinas() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void desativaBotoes() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
